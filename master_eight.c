@@ -3,7 +3,7 @@
  * Author: VARUN SAHNI
  *
  * Created on changed 6 june, 2018, 8:40 PM
- * this is proper working code  for 8 switch for black touch panel 
+ * this is proper working code  for 6 switch for corel
  NOTE: In this code i used header files instead of define function inside the main program itself
  * header files used:
  * 1>>>actiontouchpanel.h>>>>>carrying all information about touchpanel
@@ -51,8 +51,7 @@
 #define OUTPUT_RELAY4 RF1
 #define OUTPUT_RELAY5 RA3
 #define OUTPUT_RELAY6 RA1
-#define OUTPUT_RELAY7 RA2
-#define OUTPUT_RELAY8 RB3
+
 
 #define OUTPUT_RELAY_DIR_1 TRISBbits.TRISB1
 #define OUTPUT_RELAY_DIR_2 TRISCbits.TRISC1
@@ -60,8 +59,7 @@
 #define OUTPUT_RELAY_DIR_4 TRISFbits.TRISF1
 #define OUTPUT_RELAY_DIR_5 TRISAbits.TRISA3        
 #define OUTPUT_RELAY_DIR_6 TRISAbits.TRISA1 
-#define OUTPUT_RELAY_DIR_7 TRISAbits.TRISA2
-#define OUTPUT_RELAY_DIR_8 TRISBbits.TRISB3
+
 
 #define INPUTSWITCH1 RF2
 #define INPUTSWITCH2 RF3
@@ -69,8 +67,7 @@
 #define INPUTSWITCH4 RF5
 #define INPUTSWITCH5 RF6   
 #define INPUTSWITCH6 RD7
-#define INPUTSWITCH7 RD6
-#define INPUTSWITCH8 RD5
+
 
 
 #define INPUT_SWITCH_DIR_1 TRISFbits.TRISF2
@@ -79,14 +76,15 @@
 #define INPUT_SWITCH_DIR_4 TRISFbits.TRISF5
 #define INPUT_SWITCH_DIR_5 TRISFbits.TRISF6
 #define INPUT_SWITCH_DIR_6 TRISDbits.TRISD7
-#define INPUT_SWITCH_DIR_7 TRISDbits.TRISD6
-#define INPUT_SWITCH_DIR_8 TRISDbits.TRISD5
+
 
 /*
  * Extra Periferals Direction and PORT
  */
 //#define ZCD_CCP9_DIR TRISEbits.TRISE3
 // USART Directions
+
+
 #define USART_1_TRANSMIT_OUTPUT_DIR TRISCbits.TRISC6
 #define USART_1_RECIEVE_INPUT_DIR TRISCbits.TRISC7
 
@@ -140,7 +138,7 @@ unsigned char tempReceiveTouchpanelDataBuffer[TOUCHPANEL_DATA_LENGTH-8]="#";
 extern unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
 extern unsigned char copy_parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
 
-#define TouchMatikBoardAddress 'h'
+#define TouchMatikBoardAddress 'e'
 //#define DEBUG
 unsigned int M1;unsigned int M2;unsigned int M3;unsigned int M4;unsigned int M5;
 
@@ -597,305 +595,11 @@ R1=ON;R2=ON;R3=ON;R4=ON;R5=ON;R6=ON;R7=ON;R8=ON;
             R7=1;
            
         }
-        //on condtion
-        if(copy_parentalLockBuffer[7] == CHAR_OFF && INPUTSWITCH7 == ON && R7 == ON)
-        {
-            if(man==1)
-            {
-            __delay_ms(5);
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '1';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '7';__delay_ms(1);  
-            send_Response_To_Touch('G','1');
-            OUTPUT_RELAY7=ON;
-            }
-            man=0;
-            R7=0;
-     }
-    
-              //off
-        if(copy_parentalLockBuffer[8] == CHAR_OFF && INPUTSWITCH8 == OFF && R8 == OFF)
-        {
-            if(man==1)
-            {
-         
-            __delay_ms(5);
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1); 
-            TX1REG = '8';__delay_ms(1);
-            send_Response_To_Touch('H','0');
-            OUTPUT_RELAY8=OFF;
-            }
-            man=0;
-            R8=1;
-           
-        }
-        //on condtion
-        if(copy_parentalLockBuffer[8] == CHAR_OFF && INPUTSWITCH8 == ON && R8 == ON)
-        {
-            if(man==1)
-            {
-            __delay_ms(5);
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '1';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '8';__delay_ms(1);
-            send_Response_To_Touch('H','1');
-            OUTPUT_RELAY8=ON;
-            }
-            man=0;
-            R8=0;
-        }
+        
     }   
 }
 
-//void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTATE, char chDimmerSpeedMSB, char chDimmerSpeedLSB,
-//        char charParentalControl, char charFinalFrameState){
-//    
-//    //define used variables and initilize it with zero
-//    int integerSwitchNumber = 0;
-//    int integerSwitchState = 0;
-//    int integerSpeed = 0;
-//    int currentStateBufferPositions=0;
-//   // TX1REG = charParentalControl;
-//    // Get switch Number in Integer format 
-//    //define all used character data types and initlize it with "#"
-//    char switchNumberStringBuffer[2]="#";
-//    char dimmerSpeedStringBuffer[2]="#";
-//    
-//    switchNumberStringBuffer[0]=charSwitchMSB;
-//    switchNumberStringBuffer[1]=charSwitchLSB;    
-//    integerSwitchNumber = atoi(switchNumberStringBuffer);//convert string into integer
-//    
-//    // Get switch State in Integer Format
-//    
-//    integerSwitchState = charSwitchSTATE-'0';
-//    
-//    // Get speed of Fan or level of dimmer    
-//    dimmerSpeedStringBuffer[0]=chDimmerSpeedMSB;
-//    dimmerSpeedStringBuffer[1]=chDimmerSpeedLSB;    
-//    integerSpeed = atoi(dimmerSpeedStringBuffer);
-//    
-//    // save Parental lock state of each switch into parental lock buffer
-////    int integerParentalControl=charParentalControl-'0';
-//    parentalLockBuffer[integerSwitchNumber] = charParentalControl;
-//   
-//   
-//    copy_parentalLockBuffer[integerSwitchNumber]=parentalLockBuffer[integerSwitchNumber];
-//  //   TX1REG = parentalLockBuffer[integerSwitchNumber]; //ok same
-//  //   TX1REG = copy_parentalLockBuffer[integerSwitchNumber];
-//    
-//    
-//    // ACKNOWLEDGMENT data Format :->> (Gateway+SwitchState+SwitchMSB+SwitchLSB)
-//    
-//    currentStateBufferPositions = ((1+4*(integerSwitchNumber))-5);
-//    currentStateBuffer[currentStateBufferPositions++] = 'G';
-//    currentStateBuffer[currentStateBufferPositions++] = charSwitchSTATE;
-//    currentStateBuffer[currentStateBufferPositions++] = charSwitchMSB;
-//    currentStateBuffer[currentStateBufferPositions] = charSwitchLSB;    
-//    
-//    currentStateBufferPositions-=3;     // since we have come forward by 3 address in current state buffer
-//    if(charFinalFrameState=='1')    // until 
-//    {
-//        sendAcknowledgment(currentStateBuffer+currentStateBufferPositions);  
-//        __delay_ms(5);
-//        TX2REG = '(' ;
-//        __delay_ms(1);
-//        TX2REG = TouchMatikBoardAddress ;//touchmatoc address
-//        __delay_ms(1);
-//        TX2REG =charSwitchLSB + 16 ;
-//        __delay_ms(1);
-//        TX2REG=charSwitchSTATE;
-//        __delay_ms(1);
-//        TX2REG='0';
-//        __delay_ms(1);
-//        TX2REG='0';
-//        __delay_ms(1);
-//        TX2REG='0';
-//        __delay_ms(1);
-//        TX2REG=')';
-//    }
-//    
-//    switch(integerSwitchNumber){
-//        case 1:
-//        {
-//
-//
-//             OUTPUT_RELAY1 = integerSwitchState;
-//
-//
-//        }
-//            break;
-//        case 2:
-//            {
-//
-////            TX1REG='2';
-//
-//              OUTPUT_RELAY2 = integerSwitchState;
-//
-//            break;
-//            }
-//        case 3:
-//        {
-//        
-////            TX1REG='3';
-//           
-//            OUTPUT_RELAY3 = integerSwitchState;
-//
-//
-//        }
-//            break;
-//        case 4:
-//        {
-////            TX1REG='4';
-//          
-//            OUTPUT_RELAY4 = integerSwitchState;
-//
-//        }
-//            break;
-//        case 5:
-//        {
-//            
-//                OUTPUT_RELAY5 = integerSwitchState;
-//        }
-//            break;
-//            
-//        case 6:
-//        {
-//                OUTPUT_RELAY6 = integerSwitchState;
-//        }
-//            break;
-//        case 7:
-//        {
-//                OUTPUT_RELAY7 = integerSwitchState;
-//        }
-//            break;
-//        case 8:
-//        {          
-//                OUTPUT_RELAY8 = integerSwitchState;
-//        }
-//            break;
-//        default:
-//            break;
-//        }
-//    
-//}
 
-
-
-//void actiontouchPanel(char Switch_Num, char sw_status) //, char speeds
-//{
-//
-//        M1=ON;           M2=ON;        M3=ON;        M4=ON;          M5=ON;      M6=ON;      M7=ON;      M8=ON;
-//
-//    int switch_status = sw_status - '0';        
-//    int SwNum = Switch_Num - '@';//ASCII OF SWITCH NUMBER - ASCII OF @ i.e A>>65, B>>66, C>>67, D>>68 65-64=1 and so on
-//
-//    char ch_sw_num = SwNum +'0';//send '1' for switch A, '2' for sww2 and so on 
-//
-// if(checkFlag == TRUE)  
-//  
-// {  
-//     checkFlag=FALSE;   
-// }   
-//    else
-//    {
-//        switch(Switch_Num) {
-//
-//               case 'A':
-//               {
-//               if(M1 == ON && copy_parentalLockBuffer[1] == CHAR_OFF )
-//                  {
-//                       sendFeedback_TO_Gateway('1',sw_status);
-//                       OUTPUT_RELAY1 = switch_status; M1 = OFF;
-//
-//                  }
-//               }
-//
-//               break;
-//               case 'B':
-//               {
-//
-//                 if(M2 == ON && copy_parentalLockBuffer[2] == CHAR_OFF  )
-//                  {       
-//                        sendFeedback_TO_Gateway('2',sw_status);
-//                         OUTPUT_RELAY2 = switch_status;  M2 = OFF;
-//
-//                  }
-//
-//               }
-//
-//               break;
-//               case 'C':
-//               {
-//              if(M3 == ON && copy_parentalLockBuffer[3] == CHAR_OFF )
-//                 {    
-//                    sendFeedback_TO_Gateway('3',sw_status);
-//                     OUTPUT_RELAY3 = switch_status;
-//                       M3 = OFF;
-//                  }
-//
-//               }
-//               break;
-//               case 'D':
-//               {
-//                   if(M4 == ON && copy_parentalLockBuffer[4] == CHAR_OFF)
-//                  {
-//                       sendFeedback_TO_Gateway('4',sw_status);
-//                        OUTPUT_RELAY4 = switch_status;M4 = OFF;
-//                 }
-//
-//               }
-//               break;
-//               case 'E':
-//               {
-//                if(M5 == ON && copy_parentalLockBuffer[5] == CHAR_OFF)
-//                   {
-//                         sendFeedback_TO_Gateway('5',sw_status);         
-//                        OUTPUT_RELAY5 = switch_status;  M5 = OFF;
-//
-//                  }
-//               }
-//               break;
-//               case 'F':
-//               {
-//
-//                  if(M6 == ON && copy_parentalLockBuffer[6] == CHAR_OFF)
-//                   {               
-//                      sendFeedback_TO_Gateway('6',sw_status);  
-//                      OUTPUT_RELAY6 = switch_status;M6 = OFF;
-//
-//                  } 
-//               }
-//               break;
-//                case 'G':
-//               {
-//                  if(M7 == ON && copy_parentalLockBuffer[7] == CHAR_OFF)
-//                   {
-//                      sendFeedback_TO_Gateway('7',sw_status);
-//                        OUTPUT_RELAY7 = switch_status;   M7 = OFF;             
-//
-//                  } 
-//               }
-//               break;
-//              case 'H':
-//               {
-//                  if(M8 == ON && copy_parentalLockBuffer[8] == CHAR_OFF)
-//                   {
-//                      sendFeedback_TO_Gateway('8',sw_status);
-//                        OUTPUT_RELAY8 = switch_status;  M8 = OFF;
-//
-//                  }
-//
-//               }
-//               break;
-//               default:
-//               break;
-//        }
-//    }       
-//}
 
         
     
@@ -914,8 +618,7 @@ void GPIO_pin_Initialize(){
     INPUT_SWITCH_DIR_4 = 1;
     INPUT_SWITCH_DIR_5 = 1;
     INPUT_SWITCH_DIR_6 = 1;
-   INPUT_SWITCH_DIR_7 = 1;
-   INPUT_SWITCH_DIR_8 = 1;
+ 
     
     OUTPUT_RELAY_DIR_1 = 0;
     OUTPUT_RELAY_DIR_2 = 0;
@@ -923,8 +626,7 @@ void GPIO_pin_Initialize(){
     OUTPUT_RELAY_DIR_4 = 0;
     OUTPUT_RELAY_DIR_5 = 0;
     OUTPUT_RELAY_DIR_6 = 0;
-   OUTPUT_RELAY_DIR_7 = 0;
-   OUTPUT_RELAY_DIR_8 = 0;
+
     
     // peripherals directions
   //  ZCD_CCP9_DIR = 1;
@@ -944,9 +646,7 @@ void GPIO_pin_Initialize(){
 void allPeripheralInit(){
     EUSART_Initialize();
     EUSART2_Initialize();
-//    TMR1_Initialize();
-//    TMR3_Initialize();
-   // CCP9_Initialize();
+
 }
 
 /*
@@ -1117,6 +817,5 @@ void clearAllPorts()
   OUTPUT_RELAY4 = 0;
   OUTPUT_RELAY5 = 0;
   OUTPUT_RELAY6 = 0;
-  OUTPUT_RELAY7=0;
-  OUTPUT_RELAY8=0;
+
 }
