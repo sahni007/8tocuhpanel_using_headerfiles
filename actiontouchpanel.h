@@ -86,27 +86,7 @@ void actiontouchPanel(char Switch_Num, char sw_status) //, char speeds
                   } 
                }
                break;
-                case 'G':
-               {
-                  if(M7 == ON && copy_parentalLockBuffer[7] == CHAR_OFF)
-                   {
-                      sendFeedback_TO_Gateway('7',sw_status);
-                        OUTPUT_RELAY7 = switch_status;   M7 = OFF;             
 
-                  } 
-               }
-               break;
-              case 'H':
-               {
-                  if(M8 == ON && copy_parentalLockBuffer[8] == CHAR_OFF)
-                   {
-                      sendFeedback_TO_Gateway('8',sw_status);
-                        OUTPUT_RELAY8 = switch_status;  M8 = OFF;
-
-                  }
-
-               }
-               break;
                default:
                break;
         }
