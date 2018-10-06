@@ -137,16 +137,7 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
                 OUTPUT_RELAY6 = integerSwitchState;
         }
             break;
-        case 7:
-        {
-                OUTPUT_RELAY7 = integerSwitchState;
-        }
-            break;
-        case 8:
-        {          
-                OUTPUT_RELAY8 = integerSwitchState;
-        }
-            break;
+
         default:
             break;
         }
