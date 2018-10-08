@@ -1,9 +1,9 @@
 /* 
  * File:   varun_4_1.c
  * Author: VARUN SAHNI
- *
+ *MODULE: TOPAZ-1
  * Created on changed 6 june, 2018, 8:40 PM
- * this is proper working code  for 8 switch for black touch panel 
+ * this is proper working code  for 6+1fan switch for black touch panel 
  NOTE: In this code i used header files instead of define function inside the main program itself
  * header files used:
  * 1>>>actiontouchpanel.h>>>>>carrying all information about touchpanel
