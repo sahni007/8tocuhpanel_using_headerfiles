@@ -577,24 +577,7 @@ R1=ON;R2=ON;R3=ON;R4=ON;R5=ON;R6=ON;R7=ON;R8=ON;
             R6=0;
         }
        
-              //off
-        if(copy_parentalLockBuffer[7] == CHAR_OFF && INPUTSWITCH7 == OFF && R7 == OFF)
-        {
-            if(man==1)
-            {
-         
-            __delay_ms(5);
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1); 
-            TX1REG = '7';__delay_ms(1);
-            send_Response_To_Touch('G','0');
-            OUTPUT_RELAY7=OFF;
-            }
-            man=0;
-            R7=1;
-           
-        }
+
         
     }   
 }
