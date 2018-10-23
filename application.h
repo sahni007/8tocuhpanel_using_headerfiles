@@ -79,16 +79,7 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
 
             break;
             }
-        case 3:
-        {
-            RELAY3 = integerSwitchState;
-        }
-            break;
-        case 4:
-        {
-            RELAY4 = integerSwitchState;
-        }
-            break;
+
      
         default:
             break;
