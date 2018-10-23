@@ -1,6 +1,4 @@
-#include <xc.h> // include processor files - each processor file is guarded.  
 
-#define _XTAL_FREQ 16000000
 void actiontouchPanel(char Switch_Num, char sw_status) //, char speeds
 {
 
@@ -65,48 +63,7 @@ void actiontouchPanel(char Switch_Num, char sw_status) //, char speeds
 
                }
                break;
-               case 'E':
-               {
-                if(M5 == ON && copy_parentalLockBuffer[5] == CHAR_OFF)
-                   {
-                         sendFeedback_TO_Gateway('5',sw_status);         
-                        OUTPUT_RELAY5 = switch_status;  M5 = OFF;
-
-                  }
-               }
-               break;
-               case 'F':
-               {
-
-                  if(M6 == ON && copy_parentalLockBuffer[6] == CHAR_OFF)
-                   {               
-                      sendFeedback_TO_Gateway('6',sw_status);  
-                      OUTPUT_RELAY6 = switch_status;M6 = OFF;
-
-                  } 
-               }
-               break;
-                case 'G':
-               {
-                  if(M7 == ON && copy_parentalLockBuffer[7] == CHAR_OFF)
-                   {
-                      sendFeedback_TO_Gateway('7',sw_status);
-                        OUTPUT_RELAY7 = switch_status;   M7 = OFF;             
-
-                  } 
-               }
-               break;
-              case 'H':
-               {
-                  if(M8 == ON && copy_parentalLockBuffer[8] == CHAR_OFF)
-                   {
-                      sendFeedback_TO_Gateway('8',sw_status);
-                        OUTPUT_RELAY8 = switch_status;  M8 = OFF;
-
-                  }
-
-               }
-               break;
+               
                default:
                break;
         }
