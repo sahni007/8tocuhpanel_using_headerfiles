@@ -478,8 +478,7 @@ void GPIO_pin_Initialize() {
     clearAllPorts();
     pinINIT_extra();
     
-    INPUT_FAN_DIR=1;
-    INPUT1_SWITCH_DIR=1;
+
 
     
     RELAY1_DIR=0;
