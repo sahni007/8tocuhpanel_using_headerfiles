@@ -3,7 +3,13 @@
  * Author: VARUN SAHNI
  *module:ENRALD
  * Created on changed 6 june, 2018, 8:40 PM
- * this is proper working code  for 4 switch for black touch panel 
+ * this is proper working code  for 2 switch for black touch panel 
+ PCB: 5.4G17
+ LOAD>>>SWITCH
+ RF1>>RF7
+ RF0>>RF5
+ TOuchmatik module name: OPAL(2switch)
+ Address: 'b'
  NOTE: In this code i used header files instead of define function inside the main program itself
  * header files used:
  * 1>>>actiontouchpanel.h>>>>>carrying all information about touchpanel
@@ -47,27 +53,21 @@
 
 #define RELAY1 RF1
 #define RELAY2 RF0
-#define RELAY3 RA3
-#define RELAY4 RA2
+
 
 #define RELAY1_DIR TRISFbits.TRISF1
 #define RELAY2_DIR TRISFbits.TRISF0
-#define RELAY3_DIR TRISAbits.TRISA3
-#define RELAY4_DIR TRISAbits.TRISA2
+
 
 //switch for fan
 //input switch
 #define INPUT1_SWITCH PORTFbits.RF7
 #define INPUT2_SWITCH PORTFbits.RF5
-#define INPUT3_SWITCH PORTFbits.RF3
-#define INPUT4_SWITCH PORTFbits.RF2
-#define INPUT_FAN PORTAbits.RA5
+
 
 #define INPUT1_SWITCH_DIR TRISFbits.TRISF7
 #define INPUT2_SWITCH_DIR TRISFbits.TRISF5
-#define INPUT3_SWITCH_DIR TRISFbits.TRISF3
-#define INPUT4_SWITCH_DIR TRISFbits.TRISF2
-#define INPUT_FAN_DIR TRISAbits.TRISA5
+
 
 #define UART1_TX_DIR TRISCbits.TRISC6
 #define UART1_RX_DIR TRISCbits.TRISC7
@@ -77,7 +77,7 @@
 #define UART2_RX_DIR TRISGbits.TRISG2               // RX2 pin = input  
 
 #define RECIEVED_DATA_LENGTH (16*2)
-#define TOTAL_NUMBER_OF_SWITCH (8*2)
+#define TOTAL_NUMBER_OF_SWITCH (2*2)
 
 
 #define TOUCHPANEL_DATA_LENGTH (8*2)
@@ -87,8 +87,8 @@
 #define CHAR_TRUE '1'
 #define CHAR_FALSE '0'
 
-#define TouchMatikBoardAddress 'c'
-// fan response switch
+#define TouchMatikBoardAddress 'b'
+
 unsigned int M1;unsigned int M2;unsigned int M3;unsigned int M4;unsigned int M5;unsigned int M6;unsigned int M7;unsigned int M8;
 unsigned int R1;unsigned int R2;unsigned int R3;unsigned int R4;unsigned int R5;unsigned int R6;unsigned int R7;unsigned int R8;
 
@@ -245,8 +245,7 @@ void main() {
 
     RELAY1 = OFF;
     RELAY2 = OFF;
-    RELAY3 = OFF;
-    RELAY4 = OFF;
+
 
     while(1)
     {
@@ -417,78 +416,6 @@ void main() {
         }
         
         
-       // //check switch third status 
-        //off condition
-        if(copy_parentalLockBuffer[3] == CHAR_OFF && INPUT3_SWITCH == OFF && R3 == OFF)
-        {
-            if(man == 1)
-            {
-            
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '3';__delay_ms(1);
-            send_Response_To_Touch('C','0');
-            RELAY3=OFF;
-            }
-            man=0;
-            R3=1;
-          
-        }
-        //on condtion
-        if(copy_parentalLockBuffer[3] == CHAR_OFF && INPUT3_SWITCH == ON && R3 == ON)
-        {
-            if(man==1)
-            {
-            
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '1';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '3';__delay_ms(1);
-            send_Response_To_Touch('C','1');
-            RELAY3=ON;
-            }
-            man=0;
-            R3=0;
-            
-        }
-        
-        
-       // //check switch fourth status 
-        //off condition
-        if(copy_parentalLockBuffer[4] == CHAR_OFF && INPUT4_SWITCH == OFF && R4 == OFF)
-        {
-            if(man==1)
-            {
-            
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '4';__delay_ms(1);
-            send_Response_To_Touch('D','0');
-            RELAY4=OFF;
-            }
-            man=0;
-            R4=1;
-            
-        }
-        //on condtion
-        if(copy_parentalLockBuffer[4] == CHAR_OFF && INPUT4_SWITCH == ON && R4 == ON)
-        {
-            if(man==1)
-            {
-            
-            TX1REG = 'R';__delay_ms(1);
-            TX1REG = '1';__delay_ms(1);
-            TX1REG = '0';__delay_ms(1);
-            TX1REG = '4';__delay_ms(1);
-            send_Response_To_Touch('D','1');
-             RELAY4=ON;
-            }
-            man=0;
-            R4=0;
-           
-        } 
        
     }//end of while
    
@@ -553,14 +480,10 @@ void GPIO_pin_Initialize() {
     
     INPUT_FAN_DIR=1;
     INPUT1_SWITCH_DIR=1;
-    INPUT2_SWITCH_DIR=1;
-    INPUT3_SWITCH_DIR=1;
-    INPUT4_SWITCH_DIR=1;
+
     
     RELAY1_DIR=0;
-    RELAY2_DIR=0;
-    RELAY3_DIR=0;
-    RELAY4_DIR=0;
+    RELAY2_DIR=0;   
     
 
     
@@ -692,7 +615,6 @@ void clearAllPorts()
  
     RELAY1=OFF;
     RELAY2=OFF;
-    RELAY3=OFF;
-    RELAY4=OFF;
+
 }
 
