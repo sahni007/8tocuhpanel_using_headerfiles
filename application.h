@@ -10,10 +10,7 @@
 #define OUTPUT_RELAY2 RC1
 #define OUTPUT_RELAY3 RA0
 #define OUTPUT_RELAY4 RF1
-#define OUTPUT_RELAY5 RA3
-#define OUTPUT_RELAY6 RA1
-#define OUTPUT_RELAY7 RA2
-#define OUTPUT_RELAY8 RB3
+
 
 
 //extern unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
@@ -123,28 +120,6 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
           
             OUTPUT_RELAY4 = integerSwitchState;
 
-        }
-            break;
-        case 5:
-        {
-            
-                OUTPUT_RELAY5 = integerSwitchState;
-        }
-            break;
-            
-        case 6:
-        {
-                OUTPUT_RELAY6 = integerSwitchState;
-        }
-            break;
-        case 7:
-        {
-                OUTPUT_RELAY7 = integerSwitchState;
-        }
-            break;
-        case 8:
-        {          
-                OUTPUT_RELAY8 = integerSwitchState;
         }
             break;
         default:
