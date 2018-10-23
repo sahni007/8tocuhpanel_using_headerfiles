@@ -17,7 +17,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char s
  }   
     else
     {
- //    TX1REG='T';
+
         switch(Switch_Num)
         {
 
@@ -45,27 +45,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char s
                }
 
                break;
-               case 'C':
-               {
-              if( copy_parentalLockBuffer[3] == CHAR_OFF && M3 == ON )
-                 {    
-                    sendFeedback_TO_Gateway('3',sw_status);
-                     RELAY3 = switch_status;
-                       M3 = OFF;
-                  }
 
-               }
-               break;
-               case 'D':
-               {
-                   if(copy_parentalLockBuffer[4] == CHAR_OFF && M4 == ON  )
-                  {
-                       sendFeedback_TO_Gateway('4',sw_status);
-                        RELAY4 = switch_status;M4 = OFF;
-                 }
-
-               }
-               break;
              default:
              break;
         }
