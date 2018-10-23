@@ -107,8 +107,8 @@ unsigned char ErrorNames[5]="####";
 volatile int mainReceivedDataPosition=0, mainDataReceived=FALSE;
 unsigned char mainReceivedDataBuffer[RECIEVED_DATA_LENGTH]="#"; 
 unsigned char tempReceivedDataBuffer[RECIEVED_DATA_LENGTH-8]="#";
-unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000";
-unsigned char copy_parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000";
+unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="000";
+unsigned char copy_parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="000";
 unsigned char currentStateBuffer[(TOTAL_NUMBER_OF_SWITCH*4)+2]="#";
 
 
