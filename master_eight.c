@@ -551,7 +551,7 @@ void GPIO_pin_Initialize() {
     clearAllPorts();
     pinINIT_extra();
     
-    INPUT_FAN_DIR=1;
+   
     INPUT1_SWITCH_DIR=1;
     INPUT2_SWITCH_DIR=1;
     INPUT3_SWITCH_DIR=1;
