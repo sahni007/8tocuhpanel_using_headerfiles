@@ -47,7 +47,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char s
               if( copy_parentalLockBuffer[3] == CHAR_OFF && M3 == ON )
                  {    
                     sendFeedback_TO_Gateway('3',sw_status);
-                     OUTPUT_RELAY4 = switch_status;
+                     OUTPUT_RELAY4 = ~switch_status;
                        M3 = OFF;
                   }
 
