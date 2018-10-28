@@ -115,7 +115,7 @@ unsigned int M1;unsigned int M2;unsigned int M3;unsigned int M4;unsigned int M5;
         
 /* DATA USED IN MANUAL END HERE*/
 
-#define TouchMatikBoardAddress 'c'
+#define TouchMatikBoardAddress 'b'
 unsigned char ErrorNames[5]="####";
 int checkFlag=0;
 int mainReceivedDataPosition=0, mainDataReceived=FALSE;
