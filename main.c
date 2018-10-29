@@ -12,7 +12,8 @@
  *PCB:5.4G17(4+1)
  * Created on 27 octobar, 2018, 8:40 PM
  * this is proper working  code of 2switches and one dimmer proper working 
- * AND WITH Touch panle emrald
+ * AND WITH Touch panle emrald 
+ NO MANUAL SWITCH
  */
 
 #include <stdio.h>
@@ -1170,9 +1171,9 @@ void AllInterruptEnable(){
 void sendFeedback_TO_Gateway(char sw_number, char sw_status)
 {
     TX1REG='G';__delay_ms(1);
-    TX1REG=sw_number;__delay_ms(1);
-    TX1REG='0';__delay_ms(1);
     TX1REG=sw_status;__delay_ms(1);
+    TX1REG='0';__delay_ms(1);
+    TX1REG=sw_number;__delay_ms(1);
 }
 void errorsISR(char* errNum){
     int Tx_count=0;
