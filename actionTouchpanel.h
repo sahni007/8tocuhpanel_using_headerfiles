@@ -35,7 +35,7 @@ void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char s
                  if( copy_parentalLockBuffer[2] == CHAR_OFF && M2 == ON  )
                   {       
                         sendFeedback_TO_Gateway('2',sw_status);
-                         OUTPUT_DIMMER = ~switch_status;  M2 = OFF;
+                         OUTPUT_DIMMER =  ~switch_status;  M2 = OFF;
 
                   }
 
