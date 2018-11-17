@@ -1,12 +1,4 @@
-/*
- * File:   main.c
- * Author: varun.sahni04@gmail.com
- *
- * Created on 10/27/2018 5:46:21 PM UTC
- * "Created in MPLAB Xpress"
- */
-
-/* 
+//address for opal is 'b'
  * File:   varun_4_1.c
  * Author: VARUNS SAHNI
  *PCB:5.4G17(4+1)
@@ -115,7 +107,7 @@ unsigned int M1;unsigned int M2;unsigned int M3;unsigned int M4;unsigned int M5;
         
 /* DATA USED IN MANUAL END HERE*/
 
-#define TouchMatikBoardAddress 'c'
+#define TouchMatikBoardAddress 'b'
 unsigned char ErrorNames[5]="####";
 int checkFlag=0;
 int mainReceivedDataPosition=0, mainDataReceived=FALSE;
