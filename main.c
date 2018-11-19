@@ -1,9 +1,17 @@
-//address for opal is 'b'
+/*this is first comment
+ * File:   main.c
+ * Author: varun.sahni04@gmail.com
+ *
+ * Created on 10/27/2018 5:46:21 PM UTC
+ * "Created in MPLAB Xpress"
+ */
+
+/*
  * File:   varun_4_1.c
  * Author: VARUNS SAHNI
  *PCB:5.4G17(4+1)
  * Created on 27 octobar, 2018, 8:40 PM
- * this is proper working  code of 1switches and one dimmer proper working
+ * this is proper working  code of 3switches and one dimmer proper working
  * AND WITH Touch panle emrald
  */
 
@@ -45,17 +53,17 @@
 #define OUTPUT_RELAY4 PORTAbits.RA2
 #define OUTPUT_DIMMER PORTEbits.RE5   // PWM OUTPUT to MOC3021
 
-//#define INPUTSWITCH1 PORTFbits.RF7
+//#define INPUTDIMMER PORTFbits.RF7//dimmer
 // #define INPUTSWITCH2 PORTFbits.RF5
 // #define INPUTSWITCH3 PORTFbits.RF3
-// #define INPUTSWITCH4 PORTFbits.RF2
-// #define INPUTSWITCH5 PORTAbits.RA5
-//
-// //#define INPUT_SWITCH_DIR_1 TRISFbits.TRISF7
-// // #define INPUT_SWITCH_DIR_2 TRISFbits.TRISF5
-// // #define INPUT_SWITCH_DIR_3 TRISFbits.TRISF3
-// #define INPUT_SWITCH_DIR_4 TRISFbits.TRISF2
-// #define INPUT_SWITCH_DIR_5 TRISAbits.TRISA5
+#define INPUTSWITCH4 PORTFbits.RF2
+#define INPUTDIMMER PORTAbits.RA5
+
+//#define INPUT_DIMMER_DIR TRISFbits.TRISF7
+// #define INPUT_SWITCH_DIR_2 TRISFbits.TRISF5
+// #define INPUT_SWITCH_DIR_3 TRISFbits.TRISF3
+#define INPUT_SWITCH_DIR_4 TRISFbits.TRISF2
+#define INPUT_SWITCH_DIR_5 TRISAbits.TRISA5
 
 //#define OUTPUT_RELAY_DIR_1 TRISFbits.TRISF0
 //#define OUTPUT_RELAY_DIR_2 TRISFbits.TRISF1
@@ -153,6 +161,77 @@ void actiontouchPanel(char Switch_Num, char sw_status,char sw_speed );//, char s
 #include"include.h"
 
 interrupt void isr(){
+
+
+
+    /**************************************TOUCH_PANEL INTERRUPT*******************************************/
+    if(RC2IF){
+        if(RC2STAbits.OERR){    // If over run error, then reset the receiver
+            RC2STAbits.CREN = 0; // countinuous Recieve Disable
+            RC2STAbits.CREN = 1; // countinuous Recieve Enable
+
+            ErrorNames[0]='E';      ErrorNames[1]='R';      ErrorNames[2]='O';      ErrorNames[3]='V';
+            errorsISR(ErrorNames);
+        }
+       if(RC2STAbits.FERR){    // If over run error, then reset the receiver
+            RC2STAbits.CREN = 0; // countinuous Recieve Disable
+            RC2STAbits.CREN = 1; // countinuous Recieve Enable
+
+            ErrorNames[0]='R';      ErrorNames[1]='E';      ErrorNames[2]='R';      ErrorNames[3]='R';
+            errorsISR(ErrorNames);
+        }
+
+        touchpanleReceivedDatabuffer[touchpanelReceivedataPosition] = RC2REG;
+        if(touchpanleReceivedDatabuffer[0] == '(')
+        {
+            touchpanelReceivedataPosition++;
+            if(touchpanelReceivedataPosition > 7)
+            {
+                touchPanelDataReceived = TRUE;
+
+                touchpanelReceivedataPosition=0;
+                 RC2IF = 0;
+            }
+        }
+        else{
+            RC2STAbits.CREN = 0; // countinuous Recieve Disable
+            RC2STAbits.CREN = 1; // countinuous Recieve Enable
+            touchpanelReceivedataPosition=0; // Reinitiate buffer counter
+
+            ErrorNames[0]='E';      ErrorNames[1]='R';      ErrorNames[2]='R';      ErrorNames[3]='T';
+            errorsISR(ErrorNames);
+        }
+    }//End of RC2IF
+
+    // ************************************* UART INTERRUPT *********************************************** //
+    if(RC1IF){
+        if(RC1STAbits.OERR){    // If over run error, then reset the receiver
+            RC1STAbits.CREN = 0; // countinuous Recieve Disable
+            RC1STAbits.CREN = 1; // countinuous Recieve Enable
+
+            ErrorNames[0]='E';      ErrorNames[1]='R';      ErrorNames[2]='O';      ErrorNames[3]='V';
+            errorsISR(ErrorNames);
+        }
+        mainReceivedDataBuffer[mainReceivedDataPosition]=RC1REG;
+
+
+        if(mainReceivedDataBuffer[0]=='%'){
+            mainReceivedDataPosition++;
+            if(mainReceivedDataPosition>15){
+                mainDataReceived=TRUE;
+                mainReceivedDataPosition=0;
+                RC1IF=0;
+            }
+        }
+        else{
+            RC1STAbits.CREN = 0; // countinuous Recieve Disable
+            RC1STAbits.CREN = 1; // countinuous Recieve Enable
+            mainReceivedDataPosition=0; // Reinitiate buffer counter
+
+            ErrorNames[0]='E';      ErrorNames[1]='R';      ErrorNames[2]='R';      ErrorNames[3]='X';
+            errorsISR(ErrorNames);
+        }
+    }// End of RC1IF
     //*******************TIMER3 INTERRUPT**************************//
      if(PIE3bits.TMR3IE==1 && PIR3bits.TMR3IF==1)
     {
@@ -180,6 +259,7 @@ interrupt void isr(){
         if(CCP9IF == 1){
              CCP9IF=0;
          if(start_PWM_Generation_in_ISR_FLAG == 1){
+            // start_PWM_Generation_in_ISR_FLAG=0;
           switch(levelofDimmer_MSB)
                 {
                 case '0':           // 8.5
@@ -740,33 +820,33 @@ interrupt void isr(){
                                      T1CONbits.TMR1ON = 1;
                                      break;
                              case '5':               // 0.6
-                                     // TMR1H=0xF6;
-                                     // TMR1L=0xA0;
-                                     // T1CONbits.TMR1ON = 1;
-                                        OUTPUT_DIMMER=0;
+//                                     TMR1H=0xF6;
+//                                     TMR1L=0xA0;
+//                                     T1CONbits.TMR1ON = 1;
+                                     OUTPUT_DIMMER=0;
                                      break;
                              case '6':               // 0.5
-                                     // TMR1H=0xF8;
-                                     // TMR1L=0x30;
-                                     // T1CONbits.TMR1ON = 1;
-                                        OUTPUT_DIMMER=0;
+//                                     TMR1H=0xF8;
+//                                     TMR1L=0x30;
+//                                     T1CONbits.TMR1ON = 1;
+                                 OUTPUT_DIMMER=0;
                                      break;
                              case '7':            //0.4
-                                     // TMR1H=0xF9;
-                                     // TMR1L=0xC0;
-                                     // T1CONbits.TMR1ON = 1;
-                                        OUTPUT_DIMMER=0;
+//                                     TMR1H=0xF9;
+//                                     TMR1L=0xC0;
+//                                     T1CONbits.TMR1ON = 1;
+                                 OUTPUT_DIMMER=0;
                                      break;
                              case '8':           //0.3
-                                    //  TMR1H=0xFB;
-                                    //  TMR1L=0x50;
-                                    // T1CONbits.TMR1ON = 1;
+//                                     TMR1H=0xFB;
+//                                     TMR1L=0x50;
+//                                    T1CONbits.TMR1ON = 1;
                                        OUTPUT_DIMMER=0;
                                      break;
                              case '9':           // 0.2
-                                    //  TMR1H=0xFC;
-                                    // TMR1L=0xE0;
-                                    // T1CONbits.TMR1ON = 1;
+//                                     TMR1H=0xFC;
+//                                    TMR1L=0xE0;
+//                                    T1CONbits.TMR1ON = 1;
                                        OUTPUT_DIMMER=0;
                                      break;
                              default:
@@ -782,75 +862,6 @@ interrupt void isr(){
     }
 
 
-    // ************************************* UART INTERRUPT *********************************************** //
-    if(RC1IF){
-        if(RC1STAbits.OERR){    // If over run error, then reset the receiver
-            RC1STAbits.CREN = 0; // countinuous Recieve Disable
-            RC1STAbits.CREN = 1; // countinuous Recieve Enable
-
-            ErrorNames[0]='E';      ErrorNames[1]='R';      ErrorNames[2]='O';      ErrorNames[3]='V';
-            errorsISR(ErrorNames);
-        }
-        mainReceivedDataBuffer[mainReceivedDataPosition]=RC1REG;
-
-
-        if(mainReceivedDataBuffer[0]=='%'){
-            mainReceivedDataPosition++;
-            if(mainReceivedDataPosition>15){
-                mainDataReceived=TRUE;
-                mainReceivedDataPosition=0;
-                RC1IF=0;
-            }
-        }
-        else{
-            RC1STAbits.CREN = 0; // countinuous Recieve Disable
-            RC1STAbits.CREN = 1; // countinuous Recieve Enable
-            mainReceivedDataPosition=0; // Reinitiate buffer counter
-
-            ErrorNames[0]='E';      ErrorNames[1]='R';      ErrorNames[2]='R';      ErrorNames[3]='X';
-            errorsISR(ErrorNames);
-        }
-    }// End of RC1IF
-
-
-    /**************************************TOUCH_PANEL INTERRUPT*******************************************/
-    if(RC2IF){
-        if(RC2STAbits.OERR){    // If over run error, then reset the receiver
-            RC2STAbits.CREN = 0; // countinuous Recieve Disable
-            RC2STAbits.CREN = 1; // countinuous Recieve Enable
-
-            ErrorNames[0]='E';      ErrorNames[1]='R';      ErrorNames[2]='O';      ErrorNames[3]='V';
-            errorsISR(ErrorNames);
-        }
-       if(RC2STAbits.FERR){    // If over run error, then reset the receiver
-            RC2STAbits.CREN = 0; // countinuous Recieve Disable
-            RC2STAbits.CREN = 1; // countinuous Recieve Enable
-
-            ErrorNames[0]='R';      ErrorNames[1]='E';      ErrorNames[2]='R';      ErrorNames[3]='R';
-            errorsISR(ErrorNames);
-        }
-
-        touchpanleReceivedDatabuffer[touchpanelReceivedataPosition] = RC2REG;
-        if(touchpanleReceivedDatabuffer[0] == '(')
-        {
-            touchpanelReceivedataPosition++;
-            if(touchpanelReceivedataPosition > 7)
-            {
-                touchPanelDataReceived = TRUE;
-
-                touchpanelReceivedataPosition=0;
-                 RC2IF = 0;
-            }
-        }
-        else{
-            RC2STAbits.CREN = 0; // countinuous Recieve Disable
-            RC2STAbits.CREN = 1; // countinuous Recieve Enable
-            touchpanelReceivedataPosition=0; // Reinitiate buffer counter
-
-            ErrorNames[0]='E';      ErrorNames[1]='R';      ErrorNames[2]='R';      ErrorNames[3]='T';
-            errorsISR(ErrorNames);
-        }
-    }//End of RC2IF
 
 }
 
@@ -937,7 +948,36 @@ int main() {
 
         }//end of touchpanel received data
 
+       ///****************manual response*******************
+            if(copy_parentalLockBuffer[1] == CHAR_OFF && M4 == ON && INPUTDIMMER == ON)
+                  {
 
+                     sendFeedback_TO_Gateway('1','1');
+                     OUTPUT_DIMMER= 1;
+                         M4 = OFF;
+                  }
+                    if(copy_parentalLockBuffer[1] == CHAR_OFF && M4 == OFF && INPUTDIMMER == OFF)
+                  {
+
+                     sendFeedback_TO_Gateway('1','0');
+                     OUTPUT_DIMMER= 0;
+                         M4 = ON;
+                  }
+
+                    if(copy_parentalLockBuffer[2] == CHAR_OFF && M5 == ON && INPUTSWITCH4 == ON)
+                  {
+
+                     sendFeedback_TO_Gateway('2','1');
+                     OUTPUT_RELAY4= 1;
+                         M5 = OFF;
+                  }
+                    if(copy_parentalLockBuffer[1] == CHAR_OFF && M5 == OFF && INPUTSWITCH4 == OFF)
+                  {
+
+                     sendFeedback_TO_Gateway('2','0');
+                     OUTPUT_RELAY4= 0;
+                         M5 = ON;
+                  }
     }
 }
 
@@ -951,8 +991,8 @@ void GPIO_pin_Initialize(){
     pinINIT_extra();
     // INPUT_SWITCH_DIR_2 = 1;
     // INPUT_SWITCH_DIR_3 = 1;
-    // INPUT_SWITCH_DIR_4 = 1;
-    // INPUT_SWITCH_DIR_5 = 1;
+    INPUT_SWITCH_DIR_5 = 1;
+    INPUT_SWITCH_DIR_4 = 1;
 
     //  OUTPUT_RELAY_DIR_2 = 0;
     // OUTPUT_RELAY_DIR_3 = 0;
@@ -1165,7 +1205,7 @@ void AllInterruptEnable(){
 void sendFeedback_TO_Gateway(char sw_number, char sw_status)
 {
     TX1REG='G';__delay_ms(1);
-    TX1REG=;sw_status;__delay_ms(1);
+    TX1REG=sw_status;__delay_ms(1);
     TX1REG='0';__delay_ms(1);
     TX1REG=sw_number;__delay_ms(1);
 }
