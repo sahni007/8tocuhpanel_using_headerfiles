@@ -5,7 +5,7 @@
  * Created on 27 octobar, 2018, 8:40 PM
  * this is proper working  code of 2switches and one dimmer proper working
  * AND WITH Touch panle emrald
-
+ NOTE: start_PWM_Generation_in_ISR_FLAG this flag is most important otherwise dimmer will not work with touch and manual response
  */
 
 #include <stdio.h>
@@ -989,14 +989,15 @@ int main() {
         //*********************************************************************
                 if(copy_parentalLockBuffer[4] == CHAR_OFF && R5 == ON && INPUTSWITCH5 == ON)
                   {
-
+                    start_PWM_Generation_in_ISR_FLAG=0;
                      sendFeedback_TO_Gateway_Main('4','1');
                      OUTPUT_DIMMER= 0;
                          R5 = OFF;
                   }
                     if(copy_parentalLockBuffer[4] == CHAR_OFF && R5 == OFF && INPUTSWITCH5 == OFF)
                   {
-
+                        start_PWM_Generation_in_ISR_FLAG=0;//this is very important thing to do
+                        //if we don't clear this flag dimmer will not operate
                      sendFeedback_TO_Gateway_Main('4','0');
                      OUTPUT_DIMMER= 1;
                          R5 = ON;

@@ -57,9 +57,11 @@ void actiontouchPanel(char Switch_Num, char sw_status, char Sw_speed) //, char s
                {
                    if(copy_parentalLockBuffer[4] == CHAR_OFF && M4 == ON  )
                   {
+                       start_PWM_Generation_in_ISR_FLAG=0;
                        sendFeedback_TO_Gateway('4',sw_status);
-                        OUTPUT_DIMMER = ~switch_status;M4 = OFF;
-                 }
+                        OUTPUT_DIMMER = ~switch_status;
+                        M4 = OFF;
+                  }
 
                }
                break;
