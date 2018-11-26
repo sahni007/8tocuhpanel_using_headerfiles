@@ -1,12 +1,3 @@
-//this is first comment
-/*
- * File:   main.c
- * Author: varun.sahni04@gmail.com
- *
- * Created on 10/27/2018 5:46:21 PM UTC
- * "Created in MPLAB Xpress"
- */
-
 /*
  * File:   varun_4_1.c
  * Author: VARUNS SAHNI
@@ -14,7 +5,7 @@
  * Created on 27 octobar, 2018, 8:40 PM
  * this is proper working  code of 2switches and one dimmer proper working
  * AND WITH Touch panle emrald
- NO MANUAL SWITCH
+
  */
 
 #include <stdio.h>
@@ -135,7 +126,7 @@ unsigned char tempReceiveTouchpanelDataBuffer[TOUCHPANEL_DATA_LENGTH-8]="#";
 
 
 unsigned int M1;unsigned int M2;unsigned int M3;unsigned int M4;unsigned int M5;
-
+unsigned int R1;unsigned int R2;unsigned int R3;unsigned int R4;unsigned int R5;
 int start_PWM_Generation_in_ISR_FLAG=FALSE;
 char levelofDimmer_MSB='0',levelofDimmer_LSB='0';
 
@@ -143,6 +134,7 @@ void errorsISR(char* errNum);
 void errorsMain(char* errNum);
 void sendAcknowledgment(char* currentStateBuffer);
 void sendFeedback_TO_Gateway(char sw_number, char sw_status);
+void sendFeedback_TO_Gateway_Main(char sw_number, char sw_status);
 void clearAllPorts();
 void pinINIT_extra();
 void GPIO_pin_Initialize();
@@ -748,33 +740,37 @@ interrupt void isr(){
                                      TMR1H=0xF5;
                                      TMR1L=0x10;
                                      T1CONbits.TMR1ON = 1;
+                                     OUTPUT_DIMMER=0;
                                      break;
                              case '5':               // 0.6
-                                     TMR1H=0xF6;
-                                     TMR1L=0xA0;
-                                     T1CONbits.TMR1ON = 1;
+//                                     TMR1H=0xF6;
+//                                     TMR1L=0xA0;
+//                                     T1CONbits.TMR1ON = 1;
+                                     OUTPUT_DIMMER=0;
                                      break;
                              case '6':               // 0.5
-                                     TMR1H=0xF8;
-                                     TMR1L=0x30;
-                                     T1CONbits.TMR1ON = 1;
+//                                     TMR1H=0xF8;
+//                                     TMR1L=0x30;
+//                                     T1CONbits.TMR1ON = 1;
+                                     OUTPUT_DIMMER=0;
                                      break;
                              case '7':            //0.4
-                                     TMR1H=0xF9;
-                                     TMR1L=0xC0;
-                                     T1CONbits.TMR1ON = 1;
+//                                     TMR1H=0xF9;
+//                                     TMR1L=0xC0;
+//                                     T1CONbits.TMR1ON = 1;
+                                     OUTPUT_DIMMER=0;
                                      break;
                              case '8':           //0.3
-                                     TMR1H=0xFB;
-                                     TMR1L=0x50;
-                                    T1CONbits.TMR1ON = 1;
-                                    //   OUTPUT_DIMMER=0;
+//                                     TMR1H=0xFB;
+//                                     TMR1L=0x50;
+//                                    T1CONbits.TMR1ON = 1;
+                                      OUTPUT_DIMMER=0;
                                      break;
                              case '9':           // 0.2
-                                     TMR1H=0xFC;
-                                    TMR1L=0xE0;
-                                    T1CONbits.TMR1ON = 1;
-                                    //   OUTPUT_DIMMER=0;
+//                                     TMR1H=0xFC;
+//                                    TMR1L=0xE0;
+//                                    T1CONbits.TMR1ON = 1;
+                                       OUTPUT_DIMMER=0;
                                      break;
                              default:
                                      break;
@@ -871,7 +867,8 @@ interrupt void isr(){
 int main() {
 
         M1=ON;    M2=ON;     M3=ON;    M4=ON;     M5=ON;
-    OUTPUT_RELAY2 = OFF; OUTPUT_RELAY3 = OFF; OUTPUT_RELAY4 = OFF;OUTPUT_DIMMER = ON;
+        R1=ON;    R2=ON;     R3=ON;    R4=ON;     R5=ON;
+
     GPIO_pin_Initialize();
     allPeripheralInit();
 
@@ -944,7 +941,66 @@ int main() {
 
         }//end of touchpanel received data
 
+//************manual Response*********************//
+                    if(copy_parentalLockBuffer[1] == CHAR_OFF && R2 == ON && INPUTSWITCH2 == ON)
+                  {
 
+                     sendFeedback_TO_Gateway_Main('1','1');
+                     OUTPUT_RELAY2= 1;
+                         R2 = OFF;
+                  }
+                    if(copy_parentalLockBuffer[1] == CHAR_OFF && R2 == OFF && INPUTSWITCH2 == OFF)
+                  {
+
+                     sendFeedback_TO_Gateway_Main('1','0');
+                     OUTPUT_RELAY2= 0;
+                         R2 = ON;
+                  }
+       //**********************************************************************
+                if(copy_parentalLockBuffer[2] == CHAR_OFF && R3 == ON && INPUTSWITCH3 == ON)
+                  {
+
+                     sendFeedback_TO_Gateway_Main('2','1');
+                     OUTPUT_RELAY3= 1;
+                         R3 = OFF;
+                  }
+                    if(copy_parentalLockBuffer[2] == CHAR_OFF && R3 == OFF && INPUTSWITCH3 == OFF)
+                  {
+
+                     sendFeedback_TO_Gateway_Main('2','0');
+                     OUTPUT_RELAY3= 0;
+                         R3 = ON;
+                  }
+        //*********************************************************************
+                if(copy_parentalLockBuffer[3] == CHAR_OFF && R4 == ON && INPUTSWITCH4 == ON)
+                  {
+
+                     sendFeedback_TO_Gateway_Main('3','1');
+                     OUTPUT_RELAY4= 1;
+                         R4 = OFF;
+                  }
+                    if(copy_parentalLockBuffer[3] == CHAR_OFF && R4 == OFF && INPUTSWITCH4 == OFF)
+                  {
+
+                     sendFeedback_TO_Gateway_Main('3','0');
+                     OUTPUT_RELAY4= 0;
+                         R4 = ON;
+                  }
+        //*********************************************************************
+                if(copy_parentalLockBuffer[4] == CHAR_OFF && R5 == ON && INPUTSWITCH5 == ON)
+                  {
+
+                     sendFeedback_TO_Gateway_Main('4','1');
+                     OUTPUT_DIMMER= 0;
+                         R5 = OFF;
+                  }
+                    if(copy_parentalLockBuffer[4] == CHAR_OFF && R5 == OFF && INPUTSWITCH5 == OFF)
+                  {
+
+                     sendFeedback_TO_Gateway_Main('4','0');
+                     OUTPUT_DIMMER= 1;
+                         R5 = ON;
+                  }
     }
 }
 
@@ -1172,6 +1228,13 @@ void AllInterruptEnable(){
 void sendFeedback_TO_Gateway(char sw_number, char sw_status)
 {
     TX1REG='G';__delay_ms(1);
+    TX1REG=sw_status;__delay_ms(1);
+    TX1REG='0';__delay_ms(1);
+    TX1REG=sw_number;__delay_ms(1);
+}
+void sendFeedback_TO_Gateway_Main(char sw_number, char sw_status)
+{
+    TX1REG='R';__delay_ms(1);
     TX1REG=sw_status;__delay_ms(1);
     TX1REG='0';__delay_ms(1);
     TX1REG=sw_number;__delay_ms(1);
