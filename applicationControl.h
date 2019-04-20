@@ -1,25 +1,10 @@
-#include <xc.h> // include processor files - each processor file is guarded.  
-
-#define _XTAL_FREQ 16000000
-#define TOTAL_NUMBER_OF_SWITCH (8*2)
-#define TouchMatikBoardAddress 'h'
-
-
-
-#define OUTPUT_RELAY1 RB1
-#define OUTPUT_RELAY2 RC1
-#define OUTPUT_RELAY3 RA0
-#define OUTPUT_RELAY4 RF1
-#define OUTPUT_RELAY5 RA3
-#define OUTPUT_RELAY6 RA1
-#define OUTPUT_RELAY7 RA2
-#define OUTPUT_RELAY8 RB3
-
-
-//extern unsigned char parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
-//extern unsigned char copy_parentalLockBuffer[TOTAL_NUMBER_OF_SWITCH]="0000000000000000";
-
-void sendAcknowledgment(char* currentStateBuffer);
+/* 
+ * File:   applicationControl.h
+ * Author: varun.sahni04@gmail.com
+ *
+ * Created on 10/27/2018 5:47:32 PM UTC
+ * "Created in MPLAB Xpress"
+ */
 
 void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTATE, char chDimmerSpeedMSB, char chDimmerSpeedLSB,
         char charParentalControl, char charFinalFrameState){
@@ -29,7 +14,6 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     int integerSwitchState = 0;
     int integerSpeed = 0;
     int currentStateBufferPositions=0;
-   // TX1REG = charParentalControl;
     // Get switch Number in Integer format 
     //define all used character data types and initlize it with "#"
     char switchNumberStringBuffer[2]="#";
@@ -51,13 +35,7 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     // save Parental lock state of each switch into parental lock buffer
 //    int integerParentalControl=charParentalControl-'0';
     parentalLockBuffer[integerSwitchNumber] = charParentalControl;
-   
-   
     copy_parentalLockBuffer[integerSwitchNumber]=parentalLockBuffer[integerSwitchNumber];
-  //   TX1REG = parentalLockBuffer[integerSwitchNumber]; //ok same
-  //   TX1REG = copy_parentalLockBuffer[integerSwitchNumber];
-    
-    
     // ACKNOWLEDGMENT data Format :->> (Gateway+SwitchState+SwitchMSB+SwitchLSB)
     
     currentStateBufferPositions = ((1+4*(integerSwitchNumber))-5);
@@ -69,8 +47,8 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     currentStateBufferPositions-=3;     // since we have come forward by 3 address in current state buffer
     if(charFinalFrameState=='1')    // until 
     {
-        sendAcknowledgment(currentStateBuffer+currentStateBufferPositions);  
-        __delay_ms(5);
+        sendAcknowledgment(currentStateBuffer+currentStateBufferPositions); 
+         __delay_ms(5);
         TX2REG = '(' ;
         __delay_ms(1);
         TX2REG = TouchMatikBoardAddress ;//touchmatoc address
@@ -91,77 +69,44 @@ void applianceControl(char charSwitchMSB, char charSwitchLSB, char charSwitchSTA
     switch(integerSwitchNumber){
         case 1:
         {
-
-
-             OUTPUT_RELAY1 = integerSwitchState;
+            OUTPUT_RELAY2 = integerSwitchState;
 
 
         }
             break;
         case 2:
-            {
-
-//            TX1REG='2';
-
-              OUTPUT_RELAY2 = integerSwitchState;
-
-            break;
-            }
-        case 3:
         {
-        
-//            TX1REG='3';
-           
             OUTPUT_RELAY3 = integerSwitchState;
 
-
         }
             break;
-        case 4:
+        case 3:
         {
-//            TX1REG='4';
-          
             OUTPUT_RELAY4 = integerSwitchState;
 
+
         }
             break;
-        case 5:
+
+        case 4:
         {
-            
-                OUTPUT_RELAY5 = integerSwitchState;
+               start_PWM_Generation_in_ISR_FLAG = integerSwitchState;
+               switch(integerSwitchState){
+                case 0:
+                    OUTPUT_DIMMER=1;  // For Triac --> inverted condition for off
+                    break;
+                case 1:
+                    levelofDimmer_MSB = chDimmerSpeedMSB;
+                    levelofDimmer_LSB = chDimmerSpeedLSB;
+                    break;
+                default:
+                    break;
+               }
         }
-            break;
-            
-        case 6:
-        {
-                OUTPUT_RELAY6 = integerSwitchState;
-        }
-            break;
-        case 7:
-        {
-                OUTPUT_RELAY7 = integerSwitchState;
-        }
-            break;
-        case 8:
-        {          
-                OUTPUT_RELAY8 = integerSwitchState;
-        }
-            break;
+        break;
+           
         default:
             break;
         }
     
-}
-
-
-void sendAcknowledgment(char* currentStateBuffer){
-  int Tx_count=0;
-  	while(Tx_count!=4)
- 	{ 
-        while (!TX1STAbits.TRMT);
-//        TX1REG='S';
- 		TX1REG = *currentStateBuffer;
- 		*currentStateBuffer++;
-        Tx_count++;
- 	}
 }
